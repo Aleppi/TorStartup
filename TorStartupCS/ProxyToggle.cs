@@ -22,10 +22,6 @@ namespace TorStartupCS
     {
 
         public RegistryKey proxyKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
-        /*public const string userRoot = "HKEY_CURRENT_USER";
-        public const string subKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
-        public const string keyName = userRoot + "\\" + subKey;
-        */
         ProcessStart ps = new ProcessStart();
         
         public ProxyToggle()
@@ -62,24 +58,10 @@ namespace TorStartupCS
                 proxyKey.SetValue("ProxyEnable", 0);
                 proxyKey.Flush();
                 InternetSetOptionApi.RefreshWinInetProxySettings();
-                ps.ProcessQuit(ps.torProcess);
-                //Console.WriteLine("Proxy is already enabled.")
-            }
-            return proxyOn;
-        }
 
-        /*public bool ProxyOff(bool proxyOn)
-        {
-            if (proxyOn == true)
-            {
-                Registry.SetValue(keyName, "ProxyEnable", 0, RegistryValueKind.DWord);
-            }
-            else
-            {
-                Console.WriteLine("Proxy is already disabled.");
+                ps.ProcessQuit(ps.torProcess);
             }
             return proxyOn;
         }
-        */
     }
 }

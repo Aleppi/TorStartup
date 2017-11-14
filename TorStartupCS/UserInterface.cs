@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace TorStartupCS
 {
@@ -27,22 +28,13 @@ namespace TorStartupCS
             ProxyToggle pt = new ProxyToggle();
             if (input.ToLower() == "start")
             {
-                //Start Tor service here in the future
-                //pt.ToggleProxy(pt.CheckProxy(Registry.GetValue(ProxyToggle.keyName, "ProxyEnable", 0)));
+                //Process[] processByName = Process.GetProcessesByName("tor");
+                //Console.WriteLine(processByName);
                 pt.ToggleProxy(pt.CheckProxy(pt.proxyKey.GetValue("ProxyEnable", 0)));
-                /*pt.proxyKey.SetValue("ProxyEnable", 1);
-                pt.proxyKey.Flush();
-                Console.WriteLine(pt.proxyKey.GetValue("ProxyEnable", 0));*/
-
             }
             else if (input.ToLower() == "close")
             {
-                //Close Tor service here in the future
-                //pt.ToggleProxy(pt.CheckProxy(Registry.GetValue(ProxyToggle.keyName, "ProxyEnable", 0)));
                 pt.ToggleProxy(pt.CheckProxy(pt.proxyKey.GetValue("ProxyEnable", 0)));
-                /*pt.proxyKey.SetValue("ProxyEnable", 0);
-                pt.proxyKey.Flush();
-                Console.WriteLine(pt.proxyKey.GetValue("ProxyEnable", 0));*/
             }
             else if (input.ToLower() == "quit")
             {
