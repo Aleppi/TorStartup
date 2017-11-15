@@ -35,7 +35,7 @@ namespace TorStartupCS
             {
                 proxyKey.SetValue("ProxyServer", "socks=127.0.0.1:9050", RegistryValueKind.String);
             }
-            else if (proxyKey.GetValue("ProxyServer").ToString().Contains("socks=127.0.0.1:9050") == false)
+            else if (!proxyKey.GetValue("ProxyServer").ToString().Contains("socks=127.0.0.1:9050"))
             {
                 proxyKey.SetValue("ProxyServer", proxyKey.GetValue("ProxyServer").ToString() + ";socks=127.0.0.1:9050", RegistryValueKind.String);
             }
@@ -46,13 +46,16 @@ namespace TorStartupCS
 
         public void ProxyOff()
         {
-            if (proxyKey.GetValue("ProxyServer").ToString().Contains("socks=127.0.0.1:9050") == true)
+            string proxyServer = proxyKey.GetValue("ProxyServer").ToString();
+            if (proxyKey.GetValue("ProxyServer").ToString().Contains(";socks=127.0.0.1:9050"))
             {
-                string proxyServer = proxyKey.GetValue("ProxyServer").ToString();
-                proxyServer = proxyServer.Remove(proxyServer.Length - 21);
-                proxyKey.SetValue("ProxyServer", proxyServer, RegistryValueKind.String);
+                proxyKey.SetValue("ProxyServer", proxyServer.Remove(proxyServer.Length - 21), RegistryValueKind.String);
             }
-            proxyKey.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
+            else if (proxyKey.GetValue("ProxyServer").ToString().Contains("socks=127.0.0.1:9050"))
+            {
+                proxyKey.DeleteValue("ProxyServer");
+                proxyKey.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
+            }
             proxyKey.Flush();
             InternetSetOptionApi.RefreshWinInetProxySettings();
         }

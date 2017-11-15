@@ -21,7 +21,6 @@ namespace TorStartupCS
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.StartInfo.UseShellExecute = false;
                 process.Start();
-                process.WaitForExit();
             }
             catch (System.ComponentModel.Win32Exception)
             {
