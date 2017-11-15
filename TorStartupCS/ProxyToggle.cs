@@ -31,14 +31,28 @@ namespace TorStartupCS
 
         public void ProxyOn()
         {
-            proxyKey.SetValue("ProxyEnable", 1);
+            if (proxyKey.GetValue("ProxyServer") == null)
+            {
+                proxyKey.SetValue("ProxyServer", "socks=127.0.0.1:9050", RegistryValueKind.String);
+            }
+            else if (proxyKey.GetValue("ProxyServer").ToString().Contains("socks=127.0.0.1:9050") == false)
+            {
+                proxyKey.SetValue("ProxyServer", proxyKey.GetValue("ProxyServer").ToString() + ";socks=127.0.0.1:9050", RegistryValueKind.String);
+            }
+            proxyKey.SetValue("ProxyEnable", 1, RegistryValueKind.DWord);
             proxyKey.Flush();
             InternetSetOptionApi.RefreshWinInetProxySettings();
         }
 
         public void ProxyOff()
         {
-            proxyKey.SetValue("ProxyEnable", 0);
+            if (proxyKey.GetValue("ProxyServer").ToString().Contains("socks=127.0.0.1:9050") == true)
+            {
+                string proxyServer = proxyKey.GetValue("ProxyServer").ToString();
+                proxyServer = proxyServer.Remove(proxyServer.Length - 21);
+                proxyKey.SetValue("ProxyServer", proxyServer, RegistryValueKind.String);
+            }
+            proxyKey.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
             proxyKey.Flush();
             InternetSetOptionApi.RefreshWinInetProxySettings();
         }
