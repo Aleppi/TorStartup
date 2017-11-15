@@ -18,18 +18,12 @@ namespace TorStartupCS
             refreshReturn = InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
         }
     }
-    public class ProxyToggle
+    public static class ProxyToggle
     {
 
-        public RegistryKey proxyKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
-        
-        
-        public ProxyToggle()
-	    {
-	    }
+        public static RegistryKey proxyKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
 
-
-        public void ProxyOn()
+        public static void ProxyOn()
         {
             if (proxyKey.GetValue("ProxyServer") == null)
             {
@@ -44,9 +38,13 @@ namespace TorStartupCS
             InternetSetOptionApi.RefreshWinInetProxySettings();
         }
 
-        public void ProxyOff()
+        public static void ProxyOff()
         {
+            if (proxyKey.GetValue("ProxyServer") == null)
+                return;
+
             string proxyServer = proxyKey.GetValue("ProxyServer").ToString();
+
             if (proxyKey.GetValue("ProxyServer").ToString().Contains(";socks=127.0.0.1:9050"))
             {
                 proxyKey.SetValue("ProxyServer", proxyServer.Remove(proxyServer.Length - 21), RegistryValueKind.String);

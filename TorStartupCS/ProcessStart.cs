@@ -3,44 +3,41 @@ using System.Diagnostics;
 
 namespace TorStartupCS
 {
-    public class ProcessStart
+    public static class ProcessStart
     {
-        public Process torProcess = new Process();
-        public string tor = Environment.ExpandEnvironmentVariables(@"C:\Users\%USERNAME%\Tor Browser\Browser\TorBrowser\Tor\tor.exe");
-        
-        public ProcessStart()
-        {
-        }
+        private static Process torProcess = new Process();
+        private static string tor = Environment.ExpandEnvironmentVariables(@"C:\Users\%USERNAME%\Tor Browser\Browser\TorBrowser\Tor\tor.exe");
 
-        public void ProcessStartUp(Process process, string fileName)
+        public static void ProcessStartUp()
         {
             try
             {
-                
-                process.StartInfo.FileName = fileName;
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.UseShellExecute = false;
-                process.Start();
+                torProcess.StartInfo.FileName = tor;
+                torProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                torProcess.StartInfo.UseShellExecute = false;
+                torProcess.Start();
             }
-            catch (System.ComponentModel.Win32Exception)
+            catch (Exception)
             {
-                throw (new System.Exception());
             }
-
-            
         }
 
-        public void ProcessQuit()
+        public static void ProcessQuit()
         {
             Process[] process = Process.GetProcessesByName("tor");
-            try
+            if (process.Length > 0)
             {
-                process[0].Kill();
-                process[0].Close();
-            }
-            catch (System.InvalidOperationException)
-            {
-                throw (new System.Exception());
+                try
+                {
+                    for (int i = 0; i < process.Length; i++)
+                    {
+                        process[i].Kill();
+                        process[i].Close();
+                    }
+                }
+                catch (Exception)
+                {
+                }
             }
         }
     }
