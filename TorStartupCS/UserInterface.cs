@@ -26,15 +26,16 @@ namespace TorStartupCS
         public void UserMenu(string input)
         {
             ProxyToggle pt = new ProxyToggle();
+            ProcessStart ps = new ProcessStart();
             if (input.ToLower() == "start")
             {
-                //Process[] processByName = Process.GetProcessesByName("tor");
-                //Console.WriteLine(processByName);
-                pt.ToggleProxy(pt.CheckProxy(pt.proxyKey.GetValue("ProxyEnable", 0)));
+                ps.ProcessStartUp(ps.torProcess, ps.tor);
+                pt.ProxyOn();
             }
             else if (input.ToLower() == "close")
             {
-                pt.ToggleProxy(pt.CheckProxy(pt.proxyKey.GetValue("ProxyEnable", 0)));
+                pt.ProxyOff();
+                ps.ProcessQuit();
             }
             else if (input.ToLower() == "quit")
             {

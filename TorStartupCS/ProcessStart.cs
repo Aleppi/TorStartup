@@ -8,49 +8,40 @@ namespace TorStartupCS
         public Process torProcess = new Process();
         public string tor = Environment.ExpandEnvironmentVariables(@"C:\Users\%USERNAME%\Tor Browser\Browser\TorBrowser\Tor\tor.exe");
         
-        //public string tor = ;
-        //public string torPath = "C:\\Users\\%USERNAME%\\Tor Browser\\Browser\\TorBrowser\\Tor";
-
         public ProcessStart()
         {
         }
 
-        public Process ProcessStartUp(Process process, string fileName/*, string filePath*/)
+        public void ProcessStartUp(Process process, string fileName)
         {
-            Process[] processByName;
             try
             {
                 
                 process.StartInfo.FileName = fileName;
-                //process.StartInfo.Arguments = filePath;
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.StartInfo.UseShellExecute = false;
                 process.Start();
                 process.WaitForExit();
-                processByName = Process.GetProcessesByName("tor");
-                return processByName[0];
             }
-            catch (System.ComponentModel.Win32Exception ex)
+            catch (System.ComponentModel.Win32Exception)
             {
                 throw (new System.Exception());
-
-                //Console.WriteLine(ex.Message);
-                //return null;
             }
 
             
         }
 
-        public void ProcessQuit(Process process)
+        public void ProcessQuit()
         {
+            Process[] process = Process.GetProcessesByName("tor");
             try
             {
-                process.Kill();
-                process.Close();
+                process[0].Kill();
+                process[0].Close();
             }
-            catch (System.InvalidOperationException ex)
+            catch (System.InvalidOperationException)
             {
-                Console.WriteLine(ex.Message);
+                throw (new System.Exception());
             }
         }
     }

@@ -13,7 +13,6 @@ namespace TorStartupCS
         public static void Main()
         {
             UserInterface ui = new UserInterface();
-            //ProxyToggle pt = new ProxyToggle();
             
             while (running)
             {
